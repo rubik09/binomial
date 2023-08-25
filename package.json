@@ -1,0 +1,21 @@
+{
+  "name": "binomo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --es-module-specifier-resolution=node --experimental-modules src/index.js",
+    "dev": "nodemon --es-module-specifier-resolution=node --experimental-modules src/index.js",
+    "eslint": "./node_modules/.bin/eslint .",
+    "eslint:fix": "./node_modules/.bin/eslint . --fix"
+  },
+  "author": "Roman Rubinshteyn",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "mysql": "^2.18.1",
+    "node-telegram-bot-api": "^0.61.0",
+    "nodemon": "^3.0.1"
+  }
+}
