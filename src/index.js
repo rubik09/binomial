@@ -156,7 +156,7 @@ bot.on('callback_query', async (msg) => {
             if(signals.hasOwnProperty(data)) {
                 await bot.deleteMessage(id, msg.message.message_id);
                 const now = new Date();
-                const actualTime = `${now.getHours()}: ${now.getMinutes()}: ${now.getSeconds()}`;
+                const actualTime = `${now.getHours() + 5}: ${now.getMinutes() + 30}: ${now.getSeconds()}`;
                 const randomTimeToBet = Math.random() * (3 - 1) + 1;
                 const finalString = data.toUpperCase();
                 const randomProcent = Math.random() * (0.10 - 0.05) + 0.05;
@@ -167,7 +167,7 @@ bot.on('callback_query', async (msg) => {
                 await bot.sendMessage(id, `
                 🔸—SIGNAL—🔸   
                 Actual time ${actualTime}
-                You can start to bet from next minute ${now.getHours()}: ${now.getMinutes() +1 }
+                You can start to bet from next minute ${now.getHours() + 5}: ${now.getMinutes() + 31}
                 BET is ${(randomProcent * 100).toFixed(0)}% of balance
                 💲 Asset: ${finalString}
                 💵 Investing amount: ${investingAmount.toFixed(1)} rs   
