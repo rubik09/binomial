@@ -173,6 +173,10 @@ bot.on('callback_query', async (msg) => {
                     modifiedTime.setHours(modifiedTime.getHours() + 5);
                     modifiedTime.setMinutes(modifiedTime.getMinutes() + 30);
                     const actualTime = `${modifiedTime.getHours()}: ${modifiedTime.getMinutes()}: ${modifiedTime.getSeconds()}`;
+                    if (modifiedTime.getMinutes() >= 60) {
+                        modifiedTime.setHours(modifiedTime.getHours() + 1);
+                        modifiedTime.setMinutes(modifiedTime.getMinutes() - 60);
+                    }
                     const randomTimeToBet = Math.random() * (3 - 1) + 1;
                     const finalString = data.toUpperCase();
                     const randomProcent = Math.random() * (0.10 - 0.05) + 0.05;
