@@ -22,6 +22,15 @@ class User {
   async addUserId(user_id, username) {
     return this.sql.query('INSERT INTO users SET ?;', { user_id, username });
   }
+  async addUserBet(user_id, currency_pair, signal_date, bet_amount) {
+    return this.sql.query('INSERT INTO temporaryDates SET ?;', { user_id, currency_pair, signal_date, bet_amount });
+  }
+  async getUserBet(user_id) {
+    return this.sql.query('SELECT * FROM temporaryDates WHERE ?', { user_id });
+  }
+  async deleteUserBet(user_id) {
+    return this.sql.query('DELETE FROM temporaryDates WHERE ?', { user_id });
+  }
   async addUserDeal(user_id, currency_pair, signal_date) {
     return this.sql.query('INSERT INTO deals SET ?;', { user_id, currency_pair, signal_date });
   }

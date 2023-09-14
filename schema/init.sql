@@ -18,3 +18,12 @@ CREATE TABLE `deals` (
   `signal_date` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `temporaryDates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(220) NOT NULL,
+  `currency_pair` varchar(255) DEFAULT '',
+  `signal_date` varchar(255) DEFAULT '',
+  `bet_amount` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

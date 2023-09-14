@@ -5,7 +5,6 @@ import addButtonsToKeyboard from './addButtonsToKeyboard';
 import { currencyPairsButtons, menuButtons, signals, states } from './config';
 import getRandomNumber from './getRandomNumber';
 
-const temporaryDates = new Map();
 bot.onText(/\/start/, async (msg) => {
     try {
         const {id, username} = msg.from;
@@ -209,25 +208,28 @@ bot.on('callback_query', async (msg) => {
                         })
                     }, (randomTimeToBet.toFixed(0) * 60 * 1000));
                     await user.addUserDeal(id, data, now);
-                    temporaryDates.set(id, {
-                        signalDate: now,
-                        betAmount: investingAmount,
-                        currencyPair: data
-                    });
+                    await user.addUserBet(id, data, now, investingAmount)
+                    // temporaryDates.set(id, {
+                    //     signalDate: now,
+                    //     betAmount: investingAmount,
+                    //     currencyPair: data
+                    // });
                 }
     
             return;
         }
         if(userState[0]?.state === 'waitingForAnswer') {
-            const {signalDate, betAmount, currencyPair} = temporaryDates.get(id);
+            const bet = await user.getUserBet(id);
+            const {signal_date, bet_amount, currency_pair} = bet[0];
             const userInfo = await user.getUserInfo(id);
             if(data === 'yes') {
                 await bot.deleteMessage(id, msg.message.message_id);
-                const newBalance = Number(userInfo[0].balance) + (Number(betAmount) * signals[currencyPair].value) - Number(betAmount);
-                await user.updateUserPositiveDeals(true, signalDate);
+                const newBalance = Number(userInfo[0].balance) + (Number(bet_amount) * signals[currency_pair].value) - Number(bet_amount);
+                await user.updateUserPositiveDeals(true, signal_date);
                 await user.updateUserBalance(id, newBalance);
+                await user.deleteUserBet(id);
                 const keyboardButtons = addButtonsToKeyboard(currencyPairsButtons, 1);
-                await bot.sendMessage(id, `You won ${((Number(betAmount) * signals[currencyPair].value) - Number(betAmount)).toFixed(1)}\n\nPlease choose currency pairs to play\n`,
+                await bot.sendMessage(id, `You won ${((Number(bet_amount) * signals[currency_pair].value) - Number(bet_amount)).toFixed(1)}\n\nPlease choose currency pairs to play\n`,
                 {
                     parse_mode: 'HTML',
                     reply_markup: {
@@ -239,10 +241,11 @@ bot.on('callback_query', async (msg) => {
             }
             if(data === 'no') {
                 await bot.deleteMessage(id, msg.message.message_id);
-                await user.updateUserNegativeDeals(false, signalDate);
-                const newBalance = Number(userInfo[0].balance) - Number(betAmount);
-                await user.updateUserNegativeDeals(true, signalDate);
+                await user.updateUserNegativeDeals(false, signal_date);
+                const newBalance = Number(userInfo[0].balance) - Number(bet_amount);
+                await user.updateUserNegativeDeals(true, signal_date);
                 await user.updateUserBalance(id, newBalance);
+                await user.deleteUserBet(id);
                 const keyboardButtons = addButtonsToKeyboard(menuButtons, 1);
                 await bot.sendMessage(id, `Unfortunately you lost your bet\n\nPlease check menu below`,
                 {
